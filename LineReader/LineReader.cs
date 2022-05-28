@@ -4,7 +4,7 @@ using System.Text;
 namespace LineReader;
 public class LineReader
 {
-    private readonly bool _suppressBlanks;
+    private readonly bool _suppressBlanks,_crlf;
     private readonly char _sep;
     private readonly StreamReader _src;
 
@@ -15,16 +15,18 @@ public class LineReader
     /// <param name="sep">The separator character, default '\n'</param>
     /// <param name="suppressBlanks">Skip over blank lines (including just \r) instead of returning them</param>
     /// <param name="buffer">Whether to wrap the provided Stream in a buffer</param>
-    public LineReader(Stream src,char sep='\n',bool suppressBlanks=true,bool buffer=true)
+    /// <param name="crlf">Hack to regard CR and LF as interchangeable for legacy DOS files</param>
+    public LineReader(Stream src,char sep='\n',bool suppressBlanks=true,bool buffer=true,bool crlf=false)
     {
         _suppressBlanks = suppressBlanks;
+        _crlf = crlf;
         _sep = sep;
         _src = new StreamReader(buffer ? new BufferedStream(src) : src);
     }
 
     private bool Skip(StringBuilder sb)
     {
-        return _suppressBlanks && (sb.Length == 0 || (sb.Length == 1 && sb[0] == '\r'));
+        return _suppressBlanks && sb.Length == 0;
     }
 
     /// <summary>
@@ -43,13 +45,13 @@ public class LineReader
                     yield return sb.ToString();
                 yield break;
             }
-            else if (c == _sep)
+            if (c == _sep)
             {
                 if (!Skip(sb))
                     yield return sb.ToString();
                 sb.Clear();
             }
-            else sb.Append((char)c);
+            else sb.Append((_crlf && c=='\r')?'\n':(char)c);
         }
     }
 
@@ -78,7 +80,7 @@ public class LineReader
                     yield return sb.ToString();
                 sb.Clear();
             }
-            else sb.Append(buff[0]);
+            else sb.Append((_crlf && buff[0]=='\r')?'\n':buff[0]);
         }
     }
 #endif
