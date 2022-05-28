@@ -7,6 +7,7 @@ jobs:
       - name: Cache Nuget dependencies
         uses: actions/cache@v2
         with:
+          key: ubuntu-latest-nuget
           path: ~/.nuget/packages
       - name: .Net SDK
         uses: actions/setup-dotnet@v2
