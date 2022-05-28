@@ -5,7 +5,7 @@ jobs:
     runs-on:  ubuntu-latest
     steps:
       - name: Cache Nuget dependencies
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           key: ubuntu-latest-nuget
           path: ~/.nuget/packages
