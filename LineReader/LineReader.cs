@@ -62,7 +62,7 @@ public class LineReader
     public async IAsyncEnumerable<string> ReadLines([EnumeratorCancellation] CancellationToken ct)
     {
         StringBuilder sb = new(); 
-        var buff = new char[1];
+        var buff = new char[]{'\uffff'};
         while (true)
         {
             var r = await _src.ReadAsync(buff, ct);
