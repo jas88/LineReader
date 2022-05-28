@@ -63,8 +63,27 @@ jobs:
       - name: Rename lcov
         shell: bash
         run: mv `find coverage -type f` all.lcov
+      - name: Pack Nuget package
+        run: dotnet pack -c Release /p:Version=${{ steps.gitversion.outputs.majorMinorPatch }} -nologo -o dist
       - name: Coveralls
         uses: coverallsapp/github-action@master
         with:
           github-token: ${{ secrets.github_token }}
           path-to-lcov: all.lcov
+      - name: Archive production artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: dist
+          path: dist
+      - name: Upload built packages
+        uses: svenstaro/upload-release-action@2.2.1
+        if: contains(github.ref, 'refs/tags/v')
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: dist/*
+          tag: ${{ github.ref }}
+          overwrite: true
+          file_glob: true
+      - name: Upload Nuget package
+        if: contains(github.ref, 'refs/tags/v')
+        run: dotnet nuget push dist/*.nupkg -k ${{ secrets.NUGET_KEY }}
