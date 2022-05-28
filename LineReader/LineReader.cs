@@ -45,6 +45,8 @@ public class LineReader
                     yield return sb.ToString();
                 yield break;
             }
+            if (_crlf && c == '\r')
+                c = _sep;
             if (c == _sep)
             {
                 if (!Skip(sb))
@@ -74,13 +76,15 @@ public class LineReader
                     yield return sb.ToString();
                 yield break;
             }
+            if (_crlf && buff[0] == '\r')
+                buff[0] = _sep;
             if (buff[0] == _sep)
             {
                 if (!Skip(sb))
                     yield return sb.ToString();
                 sb.Clear();
             }
-            else sb.Append((_crlf && buff[0]=='\r')?'\n':buff[0]);
+            else sb.Append(buff[0]);
         }
     }
 #endif

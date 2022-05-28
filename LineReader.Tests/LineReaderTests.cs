@@ -51,10 +51,10 @@ public class LineReaderTests
 
     [TestCase("foo\n\nbar",new[]{"foo","","bar"},false)]
     [TestCase("foo\n\nbar",new[]{"foo","bar"},true)]
-    [TestCase("foo\r\n\r\nbar",new[]{"foo","bar"},true,'\r')]
-    public void SkipBlanks(string payload, string[] result,bool skip,char sep='\n')
+    [TestCase("foo\r\n\r\nbar",new[]{"foo","bar"},true,true)]
+    public void SkipBlanks(string payload, string[] result,bool suppressBlanks,bool crlf=false,char sep='\n')
     {
-        var lr = new LineReader(new MemoryStream(Encoding.UTF8.GetBytes(payload)),sep:sep,suppressBlanks:skip);
+        var lr = new LineReader(new MemoryStream(Encoding.UTF8.GetBytes(payload)),sep:sep,suppressBlanks:suppressBlanks,crlf:crlf);
         var syncresult = lr.ReadLines().ToArray();
         Assert.That(syncresult,Is.EqualTo(result));
     }
