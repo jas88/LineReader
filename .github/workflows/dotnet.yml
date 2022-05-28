@@ -1,0 +1,24 @@
+on: push
+jobs:
+  buildtest:
+    name: Build, test and package
+    runs-on:  ubuntu-latest
+    steps:
+      - name: Cache Nuget dependencies
+        uses: actions/cache@v2
+        with:
+          path: ~/.nuget/packages
+      - name: .Net SDK
+        uses: actions/setup-dotnet@v2
+        with:
+          dotnet-version: 6.0.x
+      - name: Test
+        run: dotnet test --collect:"XPlat Code Coverage" -r coverage --nologo -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=lcov
+      - name: Rename lcov
+        shell: bash
+        run: mv `find coverage -type f` all.lcov
+      - name: Coveralls
+        uses: coverallsapp/github-action@master
+        with:
+          github-token: ${{ secrets.github_token }}
+          path-to-lcov: all.lcov
