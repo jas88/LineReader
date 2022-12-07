@@ -59,7 +59,7 @@ jobs:
         with:
           dotnet-version: 6.0.x
       - name: Test
-        run: dotnet test --collect:"XPlat Code Coverage" -r coverage --nologo -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=lcov
+        run: dotnet test --collect:"XPlat Code Coverage" --results-directory coverage --nologo -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=lcov
       - name: Rename lcov
         shell: bash
         run: mv `find coverage -type f` all.lcov
