@@ -64,7 +64,7 @@ jobs:
         shell: bash
         run: mv `find coverage -type f` all.lcov
       - name: Pack Nuget package
-        run: dotnet pack -c Release /p:Version=${{ steps.gitversion.outputs.majorMinorPatch }} -nologo -o dist
+        run: dotnet pack LineReader/LineReader.csproj -c Release /p:Version=${{ steps.gitversion.outputs.majorMinorPatch }} -nologo -o dist
       - name: Coveralls
         uses: coverallsapp/github-action@master
         with:
