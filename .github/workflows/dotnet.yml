@@ -3,12 +3,21 @@ jobs:
   buildtest:
     name: Build, test and package
     runs-on:  ubuntu-latest
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
     steps:
       - name: Cache Nuget dependencies
         uses: actions/cache@v3
         with:
           key: ubuntu-latest-nuget
           path: ~/.nuget/packages
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v3
+        with:
+          languages: csharp
+          queries: +security-and-quality
       - name: Git checkout
         uses: actions/checkout@v4
         with:
@@ -63,6 +72,10 @@ jobs:
       - name: Rename lcov
         shell: bash
         run: mv `find coverage -type f` all.lcov
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v3
+        with:
+          category: "/language:csharp"
       - name: Pack Nuget package
         run: dotnet pack LineReader/LineReader.csproj -c Release /p:Version=${{ steps.gitversion.outputs.majorMinorPatch }} -nologo -o dist
       - name: Coveralls
