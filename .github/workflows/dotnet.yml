@@ -9,7 +9,7 @@ jobs:
       security-events: write
     steps:
       - name: Cache Nuget dependencies
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           key: ubuntu-latest-nuget
           path: ~/.nuget/packages
