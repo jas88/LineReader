@@ -62,7 +62,7 @@ public class LineReaderTests
     [Test]
     public void PreCancelled()
     {
-        var cts = new CancellationTokenSource();
+        using var cts = new CancellationTokenSource();
         cts.Cancel();
         var lr = new LineReader(new MemoryStream(Encoding.UTF8.GetBytes("foo")));
         Assert.ThrowsAsync<TaskCanceledException>(async () => await ToArray(lr.ReadLines(cts.Token)));
