@@ -24,10 +24,7 @@ public class LineReader
         _src = new StreamReader(buffer ? new BufferedStream(src) : src);
     }
 
-    private bool Skip(StringBuilder sb)
-    {
-        return _suppressBlanks && sb.Length == 0;
-    }
+    private bool Skip(StringBuilder sb) => _suppressBlanks && sb.Length == 0;
 
     /// <summary>
     /// Iterate through the lines/substrings in this Stream
@@ -43,14 +40,17 @@ public class LineReader
             {
                 if (!Skip(sb))
                     yield return sb.ToString();
+
                 yield break;
             }
+
             if (_crlf && c == '\r')
                 c = _sep;
             if (c == _sep)
             {
                 if (!Skip(sb))
                     yield return sb.ToString();
+
                 sb.Clear();
             }
             else sb.Append((_crlf && c=='\r')?'\n':(char)c);
@@ -65,8 +65,8 @@ public class LineReader
     /// <returns>Enumerating each line/substring</returns>
     public async IAsyncEnumerable<string> ReadLines([EnumeratorCancellation] CancellationToken ct)
     {
-        StringBuilder sb = new(); 
-        var buff = new char[]{'\uffff'};
+        StringBuilder sb = new();
+        var buff = new[] { '\uffff' };
         while (true)
         {
             var r = await _src.ReadAsync(buff, ct);
@@ -74,14 +74,17 @@ public class LineReader
             {
                 if (!Skip(sb))
                     yield return sb.ToString();
+
                 yield break;
             }
+
             if (_crlf && buff[0] == '\r')
                 buff[0] = _sep;
             if (buff[0] == _sep)
             {
                 if (!Skip(sb))
                     yield return sb.ToString();
+
                 sb.Clear();
             }
             else sb.Append(buff[0]);
