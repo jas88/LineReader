@@ -1,3 +1,4 @@
+using NUnit.Framework;
 using System.Text;
 
 namespace LineReader.Tests;
@@ -17,10 +18,8 @@ public sealed class LineReaderTests
         return [.. r];
     }
 
-    private static string[] ToArraySync(IAsyncEnumerable<string> gen)
-    {
-        return Task.Run(async () => await ToArray(gen)).Result;
-    }
+    private static string[] ToArraySync(IAsyncEnumerable<string> gen) =>
+        ToArray(gen).Result;
 
     [TestCase("", new string[] { }, '\n', true)]
     [TestCase("", new[] { "" }, '\n', false)]

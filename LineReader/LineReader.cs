@@ -1,6 +1,8 @@
 ﻿using System.Runtime.CompilerServices;
 using System.Text;
 
+// ReSharper disable RemoveRedundantBraces
+
 namespace LineReader;
 
 /// <summary>
@@ -12,6 +14,7 @@ namespace LineReader;
 /// <param name="buffer">Whether to wrap the provided Stream in a buffer</param>
 /// <param name="crlf">Hack to regard CR and LF as interchangeable for legacy DOS files</param>
 public class LineReader(Stream src, char sep = '\n', bool suppressBlanks = true, bool buffer = true, bool crlf = false)
+    : IDisposable
 {
     private readonly StreamReader _src = new(buffer ? new BufferedStream(src) : src);
 
@@ -44,7 +47,10 @@ public class LineReader(Stream src, char sep = '\n', bool suppressBlanks = true,
 
                 sb.Clear();
             }
-            else sb.Append(crlf && c == '\r' ? '\n' : (char)c);
+            else
+            {
+                sb.Append(crlf && c == '\r' ? '\n' : (char)c);
+            }
         }
     }
 
@@ -78,8 +84,17 @@ public class LineReader(Stream src, char sep = '\n', bool suppressBlanks = true,
 
                 sb.Clear();
             }
-            else sb.Append(buff[0]);
+            else
+            {
+                sb.Append(buff[0]);
+            }
         }
     }
 #endif
+
+    public void Dispose()
+    {
+        GC.SuppressFinalize(this);
+        _src.Dispose();
+    }
 }
