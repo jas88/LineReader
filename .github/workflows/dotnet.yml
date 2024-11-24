@@ -34,7 +34,7 @@ jobs:
         with:
           category: "/language:csharp"
       - name: Pack Nuget package
-        run: dotnet pack LineReader/LineReader.csproj -c Release /p:Version=${{ steps.gitversion.outputs.majorMinorPatch }} -nologo -o dist
+        run: dotnet pack LineReader/LineReader.csproj -c Release -nologo -o dist
       - name: Coveralls
         uses: coverallsapp/github-action@master
         with:
