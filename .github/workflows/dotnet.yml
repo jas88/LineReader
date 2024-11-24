@@ -1,6 +1,6 @@
 on: push
 permissions:
-  actions: read
+  actions: write
   checks: write
   contents: read
   packages: write
