@@ -2,7 +2,7 @@ on: push
 permissions:
   actions: read
   checks: write
-  contents: read
+  contents: write
   packages: write
   pull-requests: read
   security-events: write
