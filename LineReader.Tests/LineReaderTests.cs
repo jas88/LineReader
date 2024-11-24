@@ -29,19 +29,21 @@ public sealed class LineReaderTests
     [TestCase("foo\0bar", new[] { "foo", "bar" }, '\0')]
     public void BasicTests(string payload, string[] result, char delim = '\n', bool skip = true)
     {
-        var lr = new LineReader(new MemoryStream(Encoding.UTF8.GetBytes(payload)), delim, skip);
-        var syncresult = lr.ReadLines().ToArray();
+        var input = Encoding.UTF8.GetBytes(payload);
+
+        using var lr1 = new LineReader(new MemoryStream(input), delim, skip);
+        var syncresult = lr1.ReadLines().ToArray();
         Assert.That(syncresult, Is.EqualTo(result));
 
         // Test async version
-        lr = new LineReader(new MemoryStream(Encoding.UTF8.GetBytes(payload)), delim, skip);
-        var asyncresult = ToArraySync(lr.ReadLines(new CancellationToken()));
+        using var lr2 = new LineReader(new MemoryStream(input), delim, skip);
+        var asyncresult = ToArraySync(lr2.ReadLines(new CancellationToken()));
         Assert.That(asyncresult, Is.EqualTo(result));
 
         // Test unbuffered too
-        lr = new LineReader(new MemoryStream(Encoding.UTF8.GetBytes(payload)), delim,
+        using var lr3 = new LineReader(new MemoryStream(input), delim,
             skip, false);
-        syncresult = lr.ReadLines().ToArray();
+        syncresult = lr3.ReadLines().ToArray();
         Assert.That(syncresult, Is.EqualTo(result));
     }
 
@@ -50,7 +52,7 @@ public sealed class LineReaderTests
     [TestCase("foo\r\n\r\nbar", new[] { "foo", "bar" }, true, true)]
     public void SkipBlanks(string payload, string[] result, bool suppressBlanks, bool crlf = false, char sep = '\n')
     {
-        var lr = new LineReader(new MemoryStream(Encoding.UTF8.GetBytes(payload)), sep, suppressBlanks, crlf: crlf);
+        using var lr = new LineReader(new MemoryStream(Encoding.UTF8.GetBytes(payload)), sep, suppressBlanks, crlf: crlf);
         var syncresult = lr.ReadLines().ToArray();
         Assert.That(syncresult, Is.EqualTo(result));
     }
@@ -60,7 +62,7 @@ public sealed class LineReaderTests
     {
         using var cts = new CancellationTokenSource();
         cts.Cancel();
-        var lr = new LineReader(new MemoryStream("foo"u8.ToArray()));
+        using var lr = new LineReader(new MemoryStream("foo"u8.ToArray()));
         Assert.ThrowsAsync<TaskCanceledException>(async () => await ToArray(lr.ReadLines(cts.Token)));
     }
 }
