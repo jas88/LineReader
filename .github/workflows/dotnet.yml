@@ -1,8 +1,9 @@
 on: push
 permissions:
-  actions: read
   checks: write
+  contents: read
   packages: write
+  pull-requests: read
   security-events: write
 jobs:
   buildtest:
