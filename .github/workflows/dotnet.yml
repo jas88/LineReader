@@ -40,7 +40,7 @@ jobs:
       - name: Pack Nuget package
         run: dotnet pack LineReader/LineReader.csproj -c Release -nologo -o dist
       - name: Coveralls
-        uses: coverallsapp/github-action@master
+        uses: coverallsapp/github-action@v2.3.4
         with:
           github-token: ${{ secrets.github_token }}
           path-to-lcov: all.lcov
