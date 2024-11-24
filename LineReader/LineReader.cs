@@ -1,33 +1,24 @@
 ﻿using System.Runtime.CompilerServices;
 using System.Text;
 
+// ReSharper disable RemoveRedundantBraces
+
 namespace LineReader;
-public class LineReader
+
+/// <summary>
+/// Construct a new LineReader
+/// </summary>
+/// <param name="src">The source Stream to read from</param>
+/// <param name="sep">The separator character, default '\n'</param>
+/// <param name="suppressBlanks">Skip over blank lines (including just \r) instead of returning them</param>
+/// <param name="buffer">Whether to wrap the provided Stream in a buffer</param>
+/// <param name="crlf">Hack to regard CR and LF as interchangeable for legacy DOS files</param>
+public class LineReader(Stream src, char sep = '\n', bool suppressBlanks = true, bool buffer = true, bool crlf = false)
+    : IDisposable
 {
-    private readonly bool _suppressBlanks,_crlf;
-    private readonly char _sep;
-    private readonly StreamReader _src;
+    private readonly StreamReader _src = new(buffer ? new BufferedStream(src) : src);
 
-    /// <summary>
-    /// Construct a new LineReader
-    /// </summary>
-    /// <param name="src">The source Stream to read from</param>
-    /// <param name="sep">The separator character, default '\n'</param>
-    /// <param name="suppressBlanks">Skip over blank lines (including just \r) instead of returning them</param>
-    /// <param name="buffer">Whether to wrap the provided Stream in a buffer</param>
-    /// <param name="crlf">Hack to regard CR and LF as interchangeable for legacy DOS files</param>
-    public LineReader(Stream src,char sep='\n',bool suppressBlanks=true,bool buffer=true,bool crlf=false)
-    {
-        _suppressBlanks = suppressBlanks;
-        _crlf = crlf;
-        _sep = sep;
-        _src = new StreamReader(buffer ? new BufferedStream(src) : src);
-    }
-
-    private bool Skip(StringBuilder sb)
-    {
-        return _suppressBlanks && sb.Length == 0;
-    }
+    private bool Skip(StringBuilder sb) => suppressBlanks && sb.Length == 0;
 
     /// <summary>
     /// Iterate through the lines/substrings in this Stream
@@ -43,17 +34,23 @@ public class LineReader
             {
                 if (!Skip(sb))
                     yield return sb.ToString();
+
                 yield break;
             }
-            if (_crlf && c == '\r')
-                c = _sep;
-            if (c == _sep)
+
+            if (crlf && c == '\r')
+                c = sep;
+            if (c == sep)
             {
                 if (!Skip(sb))
                     yield return sb.ToString();
+
                 sb.Clear();
             }
-            else sb.Append((_crlf && c=='\r')?'\n':(char)c);
+            else
+            {
+                sb.Append(crlf && c == '\r' ? '\n' : (char)c);
+            }
         }
     }
 
@@ -65,8 +62,8 @@ public class LineReader
     /// <returns>Enumerating each line/substring</returns>
     public async IAsyncEnumerable<string> ReadLines([EnumeratorCancellation] CancellationToken ct)
     {
-        StringBuilder sb = new(); 
-        var buff = new char[]{'\uffff'};
+        StringBuilder sb = new();
+        var buff = new[] { '\uffff' };
         while (true)
         {
             var r = await _src.ReadAsync(buff, ct);
@@ -74,18 +71,30 @@ public class LineReader
             {
                 if (!Skip(sb))
                     yield return sb.ToString();
+
                 yield break;
             }
-            if (_crlf && buff[0] == '\r')
-                buff[0] = _sep;
-            if (buff[0] == _sep)
+
+            if (crlf && buff[0] == '\r')
+                buff[0] = sep;
+            if (buff[0] == sep)
             {
                 if (!Skip(sb))
                     yield return sb.ToString();
+
                 sb.Clear();
             }
-            else sb.Append(buff[0]);
+            else
+            {
+                sb.Append(buff[0]);
+            }
         }
     }
 #endif
+
+    public void Dispose()
+    {
+        GC.SuppressFinalize(this);
+        _src.Dispose();
+    }
 }
