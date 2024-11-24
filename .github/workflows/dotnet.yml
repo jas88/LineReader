@@ -1,11 +1,5 @@
 on: push
-permissions:
-  actions: write
-  checks: write
-  contents: read
-  packages: write
-  pull-requests: read
-  security-events: write
+permissions: write-all
 jobs:
   buildtest:
     name: Build, test and package
