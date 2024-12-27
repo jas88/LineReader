@@ -23,7 +23,7 @@ jobs:
         with:
           fetch-depth: 0
       - name: .Net SDK
-        uses: actions/setup-dotnet@v4.1.0
+        uses: actions/setup-dotnet@v4.2.0
       - name: Test
         run: dotnet test --collect:"XPlat Code Coverage" --results-directory coverage --nologo -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=lcov
       - name: Rename lcov
