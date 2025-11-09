@@ -14,23 +14,23 @@ jobs:
           key: ubuntu-latest-nuget
           path: ~/.nuget/packages
       - name: Initialize CodeQL
-        uses: github/codeql-action/init@v3
+        uses: github/codeql-action/init@v4
         with:
           languages: csharp
           queries: +security-and-quality
       - name: Git checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           fetch-depth: 0
       - name: .Net SDK
-        uses: actions/setup-dotnet@v4.3.0
+        uses: actions/setup-dotnet@v5.0.0
       - name: Test
         run: dotnet test --collect:"XPlat Code Coverage" --results-directory coverage --nologo -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=lcov
       - name: Rename lcov
         shell: bash
         run: mv `find coverage -type f` all.lcov
       - name: Perform CodeQL Analysis
-        uses: github/codeql-action/analyze@v3
+        uses: github/codeql-action/analyze@v4
         with:
           category: "/language:csharp"
       - name: Pack Nuget package
@@ -41,12 +41,12 @@ jobs:
           github-token: ${{ secrets.github_token }}
           path-to-lcov: all.lcov
       - name: Archive production artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: dist
           path: dist
       - name: Upload built packages
-        uses: svenstaro/upload-release-action@2.9.0
+        uses: svenstaro/upload-release-action@2.11.2
         if: contains(github.ref, 'refs/tags/v')
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
