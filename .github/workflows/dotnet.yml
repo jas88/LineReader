@@ -19,7 +19,7 @@ jobs:
           languages: csharp
           queries: +security-and-quality
       - name: Git checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0
       - name: .Net SDK
@@ -36,7 +36,7 @@ jobs:
       - name: Pack Nuget package
         run: dotnet pack LineReader/LineReader.csproj -c Release -nologo -o dist
       - name: Coveralls
-        uses: coverallsapp/github-action@v2.3.6
+        uses: coverallsapp/github-action@v2.3.7
         with:
           github-token: ${{ secrets.github_token }}
           path-to-lcov: all.lcov
@@ -46,7 +46,7 @@ jobs:
           name: dist
           path: dist
       - name: Upload built packages
-        uses: svenstaro/upload-release-action@2.11.2
+        uses: svenstaro/upload-release-action@2.11.3
         if: contains(github.ref, 'refs/tags/v')
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
