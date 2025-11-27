@@ -1,14 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project>
 	<PropertyGroup>
-		<Version>0.1.0</Version>
 		<AnalysisMode>Recommended</AnalysisMode>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <IncludeSymbols>true</IncludeSymbols>
     <LangVersion>latest</LangVersion>
     <Nullable>enable</Nullable>
-    <LangVersion>latest</LangVersion>
     <ImplicitUsings>enable</ImplicitUsings>
 	</PropertyGroup>
+
+  <!-- MinVer for automatic versioning from git tags -->
+  <ItemGroup>
+    <PackageReference Include="MinVer" PrivateAssets="All" />
+  </ItemGroup>
 </Project>
