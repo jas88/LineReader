@@ -8,27 +8,30 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
-- New features and capabilities
+- Central package management using Directory.Packages.props
+- MinVer for automatic version generation from git tags
+- Automated Directory.Build.props generation script for SDK version compatibility
+- Multi-targeting for .NET 8.0, 9.0, 10.0, and netstandard2.0
 
 ### Changed
-- Changes to existing functionality
+- Upgraded to .NET 10 SDK
+- Reorganized project structure with src/ and tests/ directories
+- Updated CI workflow to use global.json for SDK versioning
+- Updated CI workflow cache key to use Directory.Packages.props hash
+- Removed hardcoded version from Directory.Build.props
 
-### Deprecated
-- Features that will be removed in upcoming releases
+## [0.1.0] - 2024-11-24
 
-### Removed
-- Features removed in this release
+### Changed
+- Target .NET 8.0 and 9.0, dropped .NET 6.0 (EOL)
+- Updated dependencies
 
-### Fixed
-- Bug fixes
-
-### Security
-- Security fixes and improvements
-
-## [1.0.0] - YYYY-MM-DD
+## [0.0.1] - 2022-05-28
 
 ### Added
 - Initial release
+- High-performance line reading library
 
-[Unreleased]: https://github.com/jas88/LineReader/compare/v1.0.0...HEAD
-[1.0.0]: https://github.com/jas88/LineReader/releases/tag/v1.0.0
+[Unreleased]: https://github.com/jas88/LineReader/compare/v0.1.0...HEAD
+[0.1.0]: https://github.com/jas88/LineReader/compare/v0.0.1...v0.1.0
+[0.0.1]: https://github.com/jas88/LineReader/releases/tag/v0.0.1
