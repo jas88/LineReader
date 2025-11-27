@@ -58,10 +58,10 @@ cat > "$TEMP_SRC" << EOF
   <!-- Import parent props -->
   <Import Project="\$([MSBuild]::GetPathOfFileAbove('Directory.Build.props', '\$(MSBuildThisFileDirectory)../'))" />
 
-  <!-- Library projects multi-target all non-EOL .NET versions -->
+  <!-- Library projects multi-target all non-EOL .NET versions plus netstandard2.0 -->
   <!-- Auto-generated based on SDK version by scripts/generate-build-props.sh -->
   <PropertyGroup>
-    <TargetFrameworks>$FRAMEWORKS</TargetFrameworks>
+    <TargetFrameworks>$FRAMEWORKS;netstandard2.0</TargetFrameworks>
   </PropertyGroup>
 </Project>
 EOF
