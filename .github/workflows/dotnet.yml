@@ -57,4 +57,4 @@ jobs:
           file_glob: true
       - name: Upload Nuget package
         if: contains(github.ref, 'refs/tags/v')
-        run: dotnet nuget push dist/*.nupkg -k ${{ secrets.NUGET_KEY }} --source https://api.nuget.org/v3/index.json
+        run: dotnet nuget push dist/*.nupkg -k ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json
