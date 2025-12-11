@@ -12,6 +12,7 @@ jobs:
         uses: actions/checkout@v6
         with:
           fetch-depth: 0
+          submodules: recursive
       - name: .Net SDK
         uses: actions/setup-dotnet@v5.0.1
         with:
