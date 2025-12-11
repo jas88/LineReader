@@ -1,86 +1,25 @@
-# Dependabot configuration for automated dependency updates
-
 version: 2
 updates:
-  # Monitor .NET NuGet packages
   - package-ecosystem: "nuget"
     directory: "/"
     schedule:
       interval: "weekly"
-      day: "monday"
-      time: "09:00"
-    open-pull-requests-limit: 10
-    reviewers:
-      - "jas88"
-    assignees:
-      - "jas88"
-    commit-message:
-      prefix: "deps"
-      include: "scope"
-    labels:
-      - "dependencies"
-      - "dotnet"
-    groups:
-      # Group Microsoft packages together
-      microsoft-packages:
-        patterns:
-          - "Microsoft.*"
-        dependency-type: "development"
+      day: "sunday"
 
-      # Group System packages together
-      system-packages:
-        patterns:
-          - "System.*"
-        dependency-type: "development"
-
-      # Group testing packages together
-      testing-packages:
-        patterns:
-          - "xunit*"
-          - "nunit*"
-          - "mstest*"
-          - "coverlet*"
-          - "Moq*"
-        dependency-type: "development"
-
-  # Monitor GitHub Actions
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
       interval: "weekly"
-      day: "monday"
-      time: "09:00"
-    open-pull-requests-limit: 5
-    reviewers:
-      - "jas88"
-    assignees:
-      - "jas88"
-    commit-message:
-      prefix: "ci"
-      include: "scope"
-    labels:
-      - "dependencies"
-      - "github-actions"
-    groups:
-      github-actions:
-        patterns:
-          - "*"
+      day: "sunday"
 
-  # Monitor .NET SDK version in global.json
+  - package-ecosystem: "gitsubmodule"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "sunday"
+
   - package-ecosystem: "dotnet-sdk"
     directory: "/"
     schedule:
       interval: "weekly"
-      day: "monday"
-      time: "09:00"
-    open-pull-requests-limit: 5
-    reviewers:
-      - "jas88"
-    assignees:
-      - "jas88"
-    commit-message:
-      prefix: "sdk"
-      include: "scope"
-    labels:
-      - "dependencies"
-      - "dotnet-sdk"
+      day: "sunday"

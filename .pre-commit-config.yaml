@@ -1,56 +1,70 @@
 # Pre-commit configuration for .NET projects
 # Uses pre-commit framework for cross-platform compatibility
+# Based on build-standards with LineReader-specific extensions
 
 repos:
   # Standard pre-commit hooks
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v5.0.0
+    rev: v4.6.0
     hooks:
+      - id: trailing-whitespace
+        exclude: '\.md$'
+      - id: end-of-file-fixer
       - id: check-yaml
-        args: ['--unsafe'] # Allow custom YAML tags
+      - id: check-json
+      - id: check-xml
       - id: check-added-large-files
-        args: ['--maxkb=1000'] # Alert on files > 1MB
+        args: ['--maxkb=1000']
       - id: check-merge-conflict
+      - id: detect-private-key
+      - id: mixed-line-ending
+        args: ['--fix=lf']
       - id: check-case-conflict
       - id: check-executables-have-shebangs
-      - id: trailing-whitespace
-        args: ['--markdown-linebreak-ext=md']
-      - id: end-of-file-fixer
-      - id: mixed-line-ending
-      - id: check-json
       - id: check-toml
-      - id: check-xml
-      - id: check-xml
 
-  # .NET specific hooks
-  - repo: https://github.com/dotnet/format
-    rev: v6.0.324305
+  # Secret detection
+  - repo: https://github.com/gitleaks/gitleaks
+    rev: v8.18.4
     hooks:
-      - id: dotnet-format
-        args: ['--fix-whitespace', '--fix-style', 'report']
-        files: \.(cs|vb|fs)$
-        types_or: [file]
+      - id: gitleaks
 
-  # Security and dependency checks
-  - repo: https://github.com/Lucas-C/pre-commit-hooks-safety
-    rev: v1.3.2
+  # Markdown linting
+  - repo: https://github.com/igorshubovych/markdownlint-cli
+    rev: v0.41.0
     hooks:
-      - id: python-safety-dependencies-check
-      - id: python-safety-security-check
+      - id: markdownlint
+        args: ['--fix', '--disable', 'MD013', 'MD033', 'MD041']
+
+  # Commit message format (conventional commits)
+  - repo: https://github.com/compilerla/conventional-pre-commit
+    rev: v3.4.0
+    hooks:
+      - id: conventional-pre-commit
+        stages: [commit-msg]
+        args: [feat, fix, docs, style, refactor, perf, test, build, ci, chore, revert]
 
   # Local hooks for repository-specific checks
   - repo: local
     hooks:
+      # .NET formatting
+      - id: dotnet-format
+        name: dotnet format
+        entry: dotnet format --verify-no-changes
+        language: system
+        types: [csharp]
+        pass_filenames: false
+
       # .NET build validation
       - id: dotnet-build
         name: dotnet build
-        entry: dotnet
+        entry: dotnet build --no-restore
         language: system
-        args: ['build', '--configuration', 'Release', '--no-restore']
-        files: \.(cs|vb|fs|csproj|sln)$
+        types: [csharp]
         pass_filenames: false
+        stages: [push]
 
-      # .NET test runner
+      # .NET test runner (LineReader-specific)
       - id: dotnet-test
         name: dotnet test
         entry: dotnet
@@ -58,9 +72,9 @@ repos:
         args: ['test', '--configuration', 'Release', '--no-build', '--verbosity', 'minimal']
         files: \.(cs|vb|fs|csproj|sln)$
         pass_filenames: false
-        stages: [pre-push] # Only run tests on push, not every commit
+        stages: [push]
 
-      # Validate package references
+      # Validate package references (LineReader-specific)
       - id: check-packages
         name: Check package references
         entry: scripts/check-packages.sh
@@ -68,15 +82,7 @@ repos:
         files: \.(csproj|sln)$
         pass_filenames: false
 
-      # Check for hardcoded secrets
-      - id: detect-secrets
-        name: Detect secrets
-        entry: scripts/detect-secrets.sh
-        language: script
-        files: \.(cs|vb|fs|json|yml|yaml|md|sh|bat|ps1)$
-        pass_filenames: false
-
-      # Validate CLAUDE.md exists and follows standards
+      # Validate CLAUDE.md exists and follows standards (LineReader-specific)
       - id: check-claude-md
         name: Check CLAUDE.md
         entry: scripts/check-claude-md.sh
@@ -84,7 +90,7 @@ repos:
         files: ^CLAUDE\.md$
         pass_filenames: false
 
-      # Commit message validation (prevent AI attribution)
+      # Commit message validation - prevent AI attribution (LineReader-specific)
       - id: block-claude-authorship
         name: Block AI attribution in commit messages
         entry: scripts/block-claude-authorship.sh
@@ -105,7 +111,8 @@ exclude: |
     TestResults/.*|
     \.vscode/settings\.json|
     .*\.user\.csproj|
-    .*\.Designer\.cs
+    .*\.Designer\.cs|
+    build-standards/.*
   )$
 
 # CI configuration
@@ -118,5 +125,5 @@ ci:
   autoupdate_branch: ''
   autoupdate_commit_msg: '[pre-commit.ci] pre-commit autoupdate'
   autoupdate_schedule: weekly
-  skip: [dotnet-test] # Skip slow tests on CI
-  submodules: false
+  skip: [dotnet-test, dotnet-build]
+  submodules: true
