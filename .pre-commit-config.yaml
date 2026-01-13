@@ -58,7 +58,7 @@ repos:
       # .NET build validation
       - id: dotnet-build
         name: dotnet build
-        entry: dotnet build --no-restore
+        entry: dotnet build --no-restore -c Release
         language: system
         types: [csharp]
         pass_filenames: false
