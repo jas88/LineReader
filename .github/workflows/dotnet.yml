@@ -26,23 +26,14 @@ jobs:
         with:
           languages: csharp
           queries: +security-and-quality
-      - name: Test
-        run: dotnet test --collect:"XPlat Code Coverage" --results-directory coverage --nologo -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=lcov
-      - name: Rename lcov
-        shell: bash
-        run: mv `find coverage -type f` all.lcov
+      - name: Build and run tests
+        run: dotnet build -c Release --nologo && tests/LineReader.Tests/bin/Release/net10.0/LineReader.Tests
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v4
         with:
           category: "/language:csharp"
       - name: Pack Nuget package
         run: dotnet pack src/LineReader/LineReader.csproj -c Release -nologo -o dist
-      - name: Codecov
-        uses: codecov/codecov-action@v5
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          files: all.lcov
-          fail_ci_if_error: false
       - name: Archive production artifacts
         uses: actions/upload-artifact@v6
         with:
