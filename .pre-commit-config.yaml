@@ -64,12 +64,11 @@ repos:
         pass_filenames: false
         stages: [push]
 
-      # .NET test runner (LineReader-specific)
+      # .NET test runner (LineReader-specific) - uses Microsoft.Testing.Platform
       - id: dotnet-test
         name: dotnet test
-        entry: dotnet
+        entry: tests/LineReader.Tests/bin/Release/net10.0/LineReader.Tests
         language: system
-        args: ['test', '--configuration', 'Release', '--no-build', '--verbosity', 'minimal']
         files: \.(cs|vb|fs|csproj|sln)$
         pass_filenames: false
         stages: [push]
