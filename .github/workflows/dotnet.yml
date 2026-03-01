@@ -35,7 +35,7 @@ jobs:
       - name: Pack Nuget package
         run: dotnet pack src/LineReader/LineReader.csproj -c Release -nologo -o dist
       - name: Archive production artifacts
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: dist
           path: dist
