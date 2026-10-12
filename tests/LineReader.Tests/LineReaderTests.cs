@@ -58,11 +58,11 @@ public sealed class LineReaderTests
     }
 
     [Test]
-    public void PreCancelled()
+    public async Task PreCancelled()
     {
         using var cts = new CancellationTokenSource();
         cts.Cancel();
         using var lr = new LineReader(new MemoryStream("foo"u8.ToArray()));
-        Assert.ThrowsAsync<TaskCanceledException>(async () => await ToArray(lr.ReadLines(cts.Token)));
+        await Assert.ThrowsAsync<TaskCanceledException>(async () => await ToArray(lr.ReadLines(cts.Token)));
     }
 }
