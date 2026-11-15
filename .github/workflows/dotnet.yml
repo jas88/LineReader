@@ -27,7 +27,7 @@ jobs:
           languages: csharp
           queries: +security-and-quality
       - name: Build and run tests
-        run: dotnet build -c Release --nologo && tests/LineReader.Tests/bin/Release/net10.0/LineReader.Tests
+        run: dotnet build -c Release --nologo && dotnet run --project tests/LineReader.Tests -c Release --no-build
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v4
         with:
