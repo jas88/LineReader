@@ -7,7 +7,6 @@ jobs:
       actions: read
       contents: write
       security-events: write
-      id-token: write
     steps:
       - name: Git checkout
         uses: actions/checkout@v7
@@ -42,19 +41,31 @@ jobs:
           path: dist
       - name: Upload built packages
         uses: svenstaro/upload-release-action@2.11.5
-        if: contains(github.ref, 'refs/tags/v')
+        if: startsWith(github.ref, 'refs/tags/v')
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           file: dist/*
           tag: ${{ github.ref }}
           overwrite: true
           file_glob: true
+  publish:
+    name: Publish to NuGet
+    needs: buildtest
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+    environment: nuget
+    permissions:
+      id-token: write
+    steps:
+      - name: Download built packages
+        uses: actions/download-artifact@v8
+        with:
+          name: dist
+          path: dist
       - name: NuGet login (Trusted Publishing)
         id: nuget-login
-        if: contains(github.ref, 'refs/tags/v')
         uses: NuGet/login@v1
         with:
           user: jas88
       - name: Upload Nuget package
-        if: contains(github.ref, 'refs/tags/v')
         run: dotnet nuget push dist/*.nupkg -k ${{ steps.nuget-login.outputs.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json
