@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.1.0] - 2026-11-15
+
+### Changed
+- Upgraded to .NET 11 SDK
+- Target frameworks are now net10.0, net11.0 and netstandard2.0; the net8.0 and net9.0
+  targets have been dropped (.NET 8 and 9 consumers now resolve the netstandard2.0 build)
+- CI runs tests via `dotnet run` rather than a hard-coded target framework output path
+- NuGet publishing uses Trusted Publishing (OIDC) instead of a long-lived API key
+
 ## [1.0.0] - 2025-11-27
 
 ### Added
@@ -34,7 +43,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Initial release
 - High-performance line reading library
 
-[Unreleased]: https://github.com/jas88/LineReader/compare/v1.0.0...HEAD
+[Unreleased]: https://github.com/jas88/LineReader/compare/v1.1.0...HEAD
+[1.1.0]: https://github.com/jas88/LineReader/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/jas88/LineReader/compare/v0.1.0...v1.0.0
 [0.1.0]: https://github.com/jas88/LineReader/compare/v0.0.1...v0.1.0
 [0.0.1]: https://github.com/jas88/LineReader/releases/tag/v0.0.1

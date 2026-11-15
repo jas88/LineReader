@@ -7,6 +7,7 @@ jobs:
       actions: read
       contents: write
       security-events: write
+      id-token: write
     steps:
       - name: Git checkout
         uses: actions/checkout@v7
@@ -48,6 +49,12 @@ jobs:
           tag: ${{ github.ref }}
           overwrite: true
           file_glob: true
+      - name: NuGet login (Trusted Publishing)
+        id: nuget-login
+        if: contains(github.ref, 'refs/tags/v')
+        uses: NuGet/login@v1
+        with:
+          user: jas88
       - name: Upload Nuget package
         if: contains(github.ref, 'refs/tags/v')
-        run: dotnet nuget push dist/*.nupkg -k ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json
+        run: dotnet nuget push dist/*.nupkg -k ${{ steps.nuget-login.outputs.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json
