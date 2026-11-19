@@ -2,6 +2,8 @@
 # Uses pre-commit framework for cross-platform compatibility
 # Based on build-standards with LineReader-specific extensions
 
+default_install_hook_types: [pre-commit, pre-push, commit-msg]
+
 repos:
   # Standard pre-commit hooks
   - repo: https://github.com/pre-commit/pre-commit-hooks
@@ -62,6 +64,7 @@ repos:
         language: system
         types: [c#]
         pass_filenames: false
+        always_run: true
         stages: [pre-push]
 
       # .NET test runner (LineReader-specific) - uses Microsoft.Testing.Platform
@@ -71,6 +74,7 @@ repos:
         language: system
         files: \.(cs|vb|fs|csproj|sln)$
         pass_filenames: false
+        always_run: true
         stages: [pre-push]
 
       # Commit message validation - prevent AI attribution (LineReader-specific)
