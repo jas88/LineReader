@@ -60,7 +60,7 @@ repos:
       # .NET build validation
       - id: dotnet-build
         name: dotnet build
-        entry: dotnet build --no-restore -c Release
+        entry: dotnet build -c Release
         language: system
         types: [c#]
         pass_filenames: false
