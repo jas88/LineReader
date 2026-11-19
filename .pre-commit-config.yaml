@@ -67,7 +67,7 @@ repos:
       # .NET test runner (LineReader-specific) - uses Microsoft.Testing.Platform
       - id: dotnet-test
         name: dotnet test
-        entry: tests/LineReader.Tests/bin/Release/net10.0/LineReader.Tests
+        entry: dotnet run --project tests/LineReader.Tests -c Release --no-build
         language: system
         files: \.(cs|vb|fs|csproj|sln)$
         pass_filenames: false
