@@ -52,7 +52,7 @@ repos:
         name: dotnet format
         entry: dotnet format --verify-no-changes
         language: system
-        types: [csharp]
+        types: [c#]
         pass_filenames: false
 
       # .NET build validation
@@ -60,7 +60,7 @@ repos:
         name: dotnet build
         entry: dotnet build --no-restore -c Release
         language: system
-        types: [csharp]
+        types: [c#]
         pass_filenames: false
         stages: [push]
 
