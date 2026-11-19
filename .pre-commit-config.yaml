@@ -62,7 +62,7 @@ repos:
         language: system
         types: [c#]
         pass_filenames: false
-        stages: [push]
+        stages: [pre-push]
 
       # .NET test runner (LineReader-specific) - uses Microsoft.Testing.Platform
       - id: dotnet-test
@@ -71,7 +71,7 @@ repos:
         language: system
         files: \.(cs|vb|fs|csproj|sln)$
         pass_filenames: false
-        stages: [push]
+        stages: [pre-push]
 
       # Validate package references (LineReader-specific)
       - id: check-packages
