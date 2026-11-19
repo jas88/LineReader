@@ -87,7 +87,6 @@ default_language_version:
 # Exclude patterns
 exclude: |
   (?x)^(
-    \.git/.*|
     \.vs/.*|
     bin/.*|
     obj/.*|
