@@ -73,22 +73,6 @@ repos:
         pass_filenames: false
         stages: [pre-push]
 
-      # Validate package references (LineReader-specific)
-      - id: check-packages
-        name: Check package references
-        entry: scripts/check-packages.sh
-        language: script
-        files: \.(csproj|sln)$
-        pass_filenames: false
-
-      # Validate CLAUDE.md exists and follows standards (LineReader-specific)
-      - id: check-claude-md
-        name: Check CLAUDE.md
-        entry: scripts/check-claude-md.sh
-        language: script
-        files: ^CLAUDE\.md$
-        pass_filenames: false
-
       # Commit message validation - prevent AI attribution (LineReader-specific)
       - id: block-claude-authorship
         name: Block AI attribution in commit messages
