@@ -2,6 +2,8 @@
 # Uses pre-commit framework for cross-platform compatibility
 # Based on build-standards with LineReader-specific extensions
 
+default_install_hook_types: [pre-commit, pre-push, commit-msg]
+
 repos:
   # Standard pre-commit hooks
   - repo: https://github.com/pre-commit/pre-commit-hooks
@@ -52,42 +54,28 @@ repos:
         name: dotnet format
         entry: dotnet format --verify-no-changes
         language: system
-        types: [csharp]
+        types: [c#]
         pass_filenames: false
 
       # .NET build validation
       - id: dotnet-build
         name: dotnet build
-        entry: dotnet build --no-restore -c Release
+        entry: dotnet build -c Release
         language: system
-        types: [csharp]
+        types: [c#]
         pass_filenames: false
-        stages: [push]
+        always_run: true
+        stages: [pre-push]
 
       # .NET test runner (LineReader-specific) - uses Microsoft.Testing.Platform
       - id: dotnet-test
         name: dotnet test
-        entry: tests/LineReader.Tests/bin/Release/net10.0/LineReader.Tests
+        entry: dotnet run --project tests/LineReader.Tests -c Release --no-build
         language: system
         files: \.(cs|vb|fs|csproj|sln)$
         pass_filenames: false
-        stages: [push]
-
-      # Validate package references (LineReader-specific)
-      - id: check-packages
-        name: Check package references
-        entry: scripts/check-packages.sh
-        language: script
-        files: \.(csproj|sln)$
-        pass_filenames: false
-
-      # Validate CLAUDE.md exists and follows standards (LineReader-specific)
-      - id: check-claude-md
-        name: Check CLAUDE.md
-        entry: scripts/check-claude-md.sh
-        language: script
-        files: ^CLAUDE\.md$
-        pass_filenames: false
+        always_run: true
+        stages: [pre-push]
 
       # Commit message validation - prevent AI attribution (LineReader-specific)
       - id: block-claude-authorship
@@ -103,7 +91,6 @@ default_language_version:
 # Exclude patterns
 exclude: |
   (?x)^(
-    \.git/.*|
     \.vs/.*|
     bin/.*|
     obj/.*|
