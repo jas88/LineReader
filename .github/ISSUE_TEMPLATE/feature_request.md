@@ -6,23 +6,28 @@ labels: enhancement
 assignees: ''
 ---
 
-**Is your feature request related to a problem? Please describe.**
+## Is your feature request related to a problem? Please describe
+
 A clear and concise description of what the problem is. Ex. I'm always frustrated when [...]
 
-**Describe the solution you'd like**
+## Describe the solution you'd like
+
 A clear and concise description of what you want to happen.
 
-**Describe alternatives you've considered**
+## Describe alternatives you've considered
+
 A clear and concise description of any alternative solutions or features you've considered.
 
-**Use Cases**
+## Use Cases
+
 Describe the specific use cases this feature would enable:
 
 1. **Use Case 1:** [Description]
 2. **Use Case 2:** [Description]
 3. **Use Case 3:** [Description]
 
-**Proposed API/Interface**
+## Proposed API/Interface
+
 If this is a code change, describe the proposed API or interface changes:
 
 ```csharp
@@ -36,15 +41,19 @@ public class NewFeature
 }
 ```
 
-**Breaking Changes**
+## Breaking Changes
+
 Will this change break existing functionality?
+
 - [ ] Yes - describe breaking changes
 - [ ] No
 
-**Additional Context**
+## Additional Context
+
 Add any other context, mockups, or examples about the feature request here.
 
-**Implementation Considerations**
+## Implementation Considerations
+
 - [ ] Performance impact
 - [ ] Security considerations
 - [ ] Backwards compatibility
