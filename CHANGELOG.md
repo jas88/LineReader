@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [1.1.0] - 2026-11-15
 
 ### Changed
+
 - Upgraded to .NET 11 SDK
 - Target frameworks are now net10.0, net11.0 and netstandard2.0; the net8.0 and net9.0
   targets have been dropped (.NET 8 and 9 consumers now resolve the netstandard2.0 build)
@@ -19,12 +20,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [1.0.0] - 2025-11-27
 
 ### Added
+
 - Central package management using Directory.Packages.props
 - MinVer for automatic version generation from git tags
 - Automated Directory.Build.props generation script for SDK version compatibility
 - Multi-targeting for .NET 8.0, 9.0, 10.0, and netstandard2.0
 
 ### Changed
+
 - Upgraded to .NET 10 SDK
 - Reorganized project structure with src/ and tests/ directories
 - Updated CI workflow to use global.json for SDK versioning
@@ -34,12 +37,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.1.0] - 2024-11-24
 
 ### Changed
+
 - Target .NET 8.0 and 9.0, dropped .NET 6.0 (EOL)
 - Updated dependencies
 
 ## [0.0.1] - 2022-05-28
 
 ### Added
+
 - Initial release
 - High-performance line reading library
 
